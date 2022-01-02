@@ -7,7 +7,7 @@ import 'package:mdst_22/config/my_doodle_icons.dart';
 
 import 'screens/home_screen.dart';
 import 'package:mdst_22/screens/task_list_screen.dart';
-import 'package:mdst_22/screens/stats_screen.dart';
+import 'package:mdst_22/screens/feed_screen.dart';
 
 void main() {
   runApp(

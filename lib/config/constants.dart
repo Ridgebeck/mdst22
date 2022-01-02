@@ -12,6 +12,7 @@ TextStyle headerStyle = GoogleFonts.permanentMarker(
   fontSize: 100,
   color: Colors.indigo[800],
 );
+TextStyle feedTextStyle = GoogleFonts.architectsDaughter(fontSize: 20.0);
 
 // general
 const kAppBarHeight = 80.0;
@@ -30,3 +31,4 @@ const double kTaskCardElevation = 10.0;
 
 // feed screen
 const double kFeedCardElevation = 10.0;
+const EdgeInsets kFeedCardPadding = EdgeInsets.all(20.0);

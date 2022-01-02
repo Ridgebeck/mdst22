@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mdst_22/widgets/polaroid.dart';
-import 'no_image_post.dart';
+import 'package:mdst_22/widgets/feed_polaroid_post.dart';
+import 'feed_no_image_post.dart';
 
 class TaskPost extends StatelessWidget {
   final String? imagePath;

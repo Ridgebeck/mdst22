@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mdst_22/config/my_doodle_icons.dart';
-import 'package:mdst_22/widgets/FeedText.dart';
-import 'package:mdst_22/widgets/task_post.dart';
+import 'package:mdst_22/widgets/feed_text_post.dart';
+import 'package:mdst_22/widgets/feed_task_post.dart';
 
 class StatsScreen extends StatelessWidget {
   const StatsScreen({
@@ -37,10 +37,10 @@ class StatsScreen extends StatelessWidget {
             );
             break;
           case 4:
-            returnWidget = const FeedText(text: "Flicker Freeeeee!");
+            returnWidget = const FeedText(text: "Flicker Freee");
             break;
           default:
-            returnWidget = const FeedText(text: "Das ist die default answer.");
+            returnWidget = const FeedText(text: "Default Answer");
             break;
         }
 
