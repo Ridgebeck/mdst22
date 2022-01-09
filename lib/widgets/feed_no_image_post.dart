@@ -6,13 +6,13 @@ import 'package:mdst_22/config/constants.dart';
 class NoImagePost extends StatelessWidget {
   final String title;
   final String text;
-  final IconData iconData;
+  final String catImage;
 
   const NoImagePost({
     Key? key,
     required this.title,
     required this.text,
-    required this.iconData,
+    required this.catImage,
   }) : super(key: key);
 
   @override
@@ -38,10 +38,7 @@ class NoImagePost extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: Icon(
-                      iconData,
-                      size: 50.0,
-                    ),
+                    child: Image.asset("assets/" + catImage),
                   ),
                   const SizedBox(width: 20.0),
                   Expanded(

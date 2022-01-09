@@ -31,15 +31,18 @@ class _ProgressBarState extends State<ProgressBar> with SingleTickerProviderStat
     return Material(
       elevation: kFeedCardElevation,
       child: Container(
-        color: kKliemannsPink,
+        color: Colors.grey[200], // kKliemannsPink,
         child: Padding(
           padding: kFeedCardPadding,
           child: Column(
             children: [
-              Text(
-                widget.text,
-                style: feedTextStyle,
+              FittedBox(
+                child: Text(
+                  widget.text,
+                  style: feedTextStyle,
+                ),
               ),
+              const SizedBox(height: 10.0),
               WiredProgress(
                 controller: myController,
                 value: widget.percentage,

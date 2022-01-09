@@ -1,15 +1,20 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'config/globals.dart';
 import 'config/notifiers.dart';
 import 'package:mdst_22/config/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mdst_22/config/my_doodle_icons.dart';
 
 import 'screens/home_screen.dart';
 import 'package:mdst_22/screens/task_list_screen.dart';
 import 'package:mdst_22/screens/feed_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); //Ensure plugin services are initialized
+  cameras = await availableCameras();
+  print("CAMERAS: $cameras"); //Get list of available cameras
+
   runApp(
     ChangeNotifierProvider(
       create: (context) => TaskList(),
@@ -75,7 +80,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                 )
               ],
               image: const DecorationImage(
-                image: AssetImage("assets/blue_paper.jpg"),
+                image: AssetImage("assets/cardboard.jpg"),
                 fit: BoxFit.cover,
               ),
               //color: kKliemannsBlau,
@@ -84,27 +89,27 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
               // ),
             ),
             child: TabBar(
-              labelColor: Colors.white,
-              unselectedLabelColor: Colors.grey[400],
+              labelColor: Colors.black,
+              unselectedLabelColor: Colors.grey[800],
               indicatorColor: Colors.transparent,
               controller: _tabController,
-              tabs: const [
+              tabs: [
                 Tab(
-                  icon: Icon(
-                    MyDoodleIcons.home,
-                    size: 32.0,
+                  child: Opacity(
+                    opacity: 0.8,
+                    child: Image.asset("assets/home.png"),
                   ),
                 ),
                 Tab(
-                  icon: Icon(
-                    MyDoodleIcons.list,
-                    size: 30.0,
+                  child: Opacity(
+                    opacity: 0.8,
+                    child: Image.asset("assets/list.png"),
                   ),
                 ),
                 Tab(
-                  icon: Icon(
-                    MyDoodleIcons.bar_chart,
-                    size: 40.0,
+                  child: Opacity(
+                    opacity: 0.8,
+                    child: Image.asset("assets/megaphone.png"),
                   ),
                 ),
               ],
@@ -112,6 +117,29 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
           ),
         ),
         appBar: AppBar(
+          leading: Center(
+            child: SizedBox(
+              width: 30.0,
+              height: 30.0,
+              child: FloatingActionButton(
+                backgroundColor: Colors.transparent,
+                heroTag: "profileButton",
+                onPressed: () {},
+                child: Container(
+                  width: 30.0,
+                  height: 30.0,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.person,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+          ),
           toolbarHeight: kAppBarHeight,
           flexibleSpace: const Image(
             image: AssetImage('assets/duct_tape.jpg'),
@@ -124,7 +152,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
               style: GoogleFonts.permanentMarker(
                 fontSize: 50.0,
 
-                color: Colors.white,
+                color: kTeamBrian, //Colors.white,
                 //fontWeight: FontWeight.normal,
               ),
             ),
@@ -132,7 +160,7 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
         ),
         body: TabBarView(
           controller: _tabController,
-          physics: const NeverScrollableScrollPhysics(), //const BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(), //const NeverScrollableScrollPhysics(),
           children: MyApp._widgetOptions,
         ),
         //MyApp._widgetOptions.elementAt(_selectedIndex),

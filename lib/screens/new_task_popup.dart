@@ -17,29 +17,29 @@ class NewTaskPopUp extends StatefulWidget {
   State<NewTaskPopUp> createState() => _NewTaskPopUpState();
 }
 
-List<IconData> iconDataList = const [
-  MyDoodleIcons.clean,
-  MyDoodleIcons.house,
-  MyDoodleIcons.scooter,
-  MyDoodleIcons.bulb,
-  MyDoodleIcons.robot,
-  MyDoodleIcons.whisk,
-  MyDoodleIcons.shower,
-  MyDoodleIcons.shirt,
-  MyDoodleIcons.tool,
-  MyDoodleIcons.laptop,
-  MyDoodleIcons.flowers,
-  MyDoodleIcons.welding,
+List<String> catImgList = const [
+  "flower.png",
+  "brush.png",
+  "bulb.png",
+  "clean.png",
+  "house.png",
+  "car.png",
+  "laptop.png",
+  "shirt.png",
+  "scooter.png",
+  "welding.png",
+  "robot.png",
+  "whisk.png",
 ];
 
 class _NewTaskPopUpState extends State<NewTaskPopUp> {
   int _pageIndex = 1;
-  late IconData _selectedIconData;
+  late String _categoryImg;
 
   // move to next page
-  void increasePageIndex(IconData data) {
+  void increasePageIndex(String catImg) {
     setState(() {
-      _selectedIconData = data;
+      _categoryImg = catImg;
       _pageIndex += 1;
     });
   }
@@ -57,6 +57,14 @@ class _NewTaskPopUpState extends State<NewTaskPopUp> {
         ),
         child: Stack(
           children: [
+            // Container(
+            //   decoration: BoxDecoration(
+            //     image: DecorationImage(
+            //       image: AssetImage("assets/graph_paper.jpg"),
+            //       fit: BoxFit.cover,
+            //     ),
+            //   ),
+            // ),
             Material(
               child: GridPaper(
                 color: Colors.grey[300]!,
@@ -76,7 +84,7 @@ class _NewTaskPopUpState extends State<NewTaskPopUp> {
                   Expanded(
                       child: _pageIndex == 1
                           ? Page1(moveToNextPage: increasePageIndex)
-                          : Page2(selectedIconData: _selectedIconData) //increaseIdx:
+                          : Page2(categoryImg: _categoryImg) //increaseIdx:
 
                       ),
                 ],
@@ -121,7 +129,7 @@ class Page1 extends StatelessWidget {
             shrinkWrap: true,
             itemBuilder: (context, index) {
               List<Widget> iconList = List<Widget>.generate(
-                iconDataList.length,
+                catImgList.length,
                 (index) => Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: TextButton(
@@ -131,14 +139,11 @@ class Page1 extends StatelessWidget {
                       minimumSize: Size.zero,
                     ),
                     onPressed: () {
-                      moveToNextPage(iconDataList[index]);
+                      moveToNextPage(catImgList[index]);
                     },
                     child: WiredCard(
                       child: FittedBox(
-                        child: Icon(
-                          iconDataList[index],
-                          size: 100,
-                        ),
+                        child: Image.asset("assets/" + catImgList[index]),
                       ),
                     ),
                   ),
@@ -179,10 +184,10 @@ class Page1 extends StatelessWidget {
 }
 
 class Page2 extends StatefulWidget {
-  final IconData selectedIconData;
+  final String categoryImg;
   const Page2({
     Key? key,
-    required this.selectedIconData,
+    required this.categoryImg,
   }) : super(key: key);
 
   @override
@@ -191,8 +196,8 @@ class Page2 extends StatefulWidget {
 
 class _Page2State extends State<Page2> {
   final myTextController = TextEditingController();
-  TimeOfDay? pickedTime = const TimeOfDay(hour: 8, minute: 0);
-  Duration pickedDuration = const Duration(minutes: 90);
+  TimeOfDay? pickedTime;
+  Duration pickedDuration = const Duration(minutes: 60);
 
   @override
   void dispose() {
@@ -206,39 +211,50 @@ class _Page2State extends State<Page2> {
     return Column(
       children: [
         SizedBox(
-          height: 45.0,
-          child: FittedBox(
-            child: Text(
-              "Was?",
-              style: headerStyle,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10.0),
-        Expanded(
-          flex: 2,
+          height: 60.0,
           child: Row(
             children: [
               FittedBox(
-                child: Icon(
-                  widget.selectedIconData,
-                  size: 200.0,
+                child: Image.asset(
+                  "assets/" + widget.categoryImg,
                 ),
               ),
               const SizedBox(width: 15.0),
               Expanded(
-                child: WiredInput(
-                  controller: myTextController,
-                  style: GoogleFonts.architectsDaughter(
-                    fontSize: 20.0,
-                    fontStyle: FontStyle.italic,
+                child: FittedBox(
+                  child: Text(
+                    ", aber was genau?",
+                    style: headerStyle,
                   ),
-                  hintText: "e.g. die Dusche reparieren",
                 ),
               ),
             ],
           ),
         ),
+        const SizedBox(height: 10.0),
+        Row(
+          children: [
+            // FittedBox(
+            //   child: Image.asset("assets/" + widget.categoryImg),
+            // ),
+            // const SizedBox(width: 15.0),
+            Expanded(
+              child: WiredInput(
+                controller: myTextController,
+                style: GoogleFonts.architectsDaughter(
+                  fontSize: 20.0,
+                  //hafontStyle: FontStyle.italic,
+                ),
+                hintText: "z.B. die Dusche reparieren",
+                hintStyle: GoogleFonts.architectsDaughter(
+                  fontSize: 20.0,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20.0),
         SizedBox(
           height: 45.0,
           child: FittedBox(
@@ -280,6 +296,11 @@ class _Page2State extends State<Page2> {
               TextButton(
                 //style: elevatedButtonStyleRound,
                 onPressed: () async {
+                  // close keyboard if it is still open
+                  if (!FocusScope.of(context).hasPrimaryFocus) {
+                    FocusScope.of(context).unfocus();
+                  }
+
                   TimeOfDay initialTime = const TimeOfDay(hour: 12, minute: 0);
                   pickedTime = await showTimePicker(
                     context: context,
@@ -288,12 +309,10 @@ class _Page2State extends State<Page2> {
                   pickedTime ?? initialTime;
                   setState(() {});
                 },
-                child: const FittedBox(
-                  child: Center(
-                      child: Icon(
-                    MyDoodleIcons.plus,
-                    size: 100.0,
-                  )),
+                child: Image.asset(
+                  "assets/clock.png",
+                  width: 60.0,
+                  height: 60.0,
                 ),
               ),
               Expanded(child: Container()),
@@ -316,43 +335,67 @@ class _Page2State extends State<Page2> {
           child: Row(
             children: [
               Expanded(
-                child: FittedBox(
-                  child: TextButton(
-                    child: const Icon(
-                      MyDoodleIcons.plus,
-                      size: 50.0,
-                      color: Colors.blue,
-                    ),
-                    onPressed: () {
-                      // increase duration
-                      pickedDuration -= kDurationStep;
-                      // limit to min duration
-                      pickedDuration =
-                          pickedDuration < kMinDuration ? kMinDuration : pickedDuration;
-
-                      setState(() {});
-                    },
+                child: TextButton(
+                  child: Image.asset(
+                    "assets/minus.png",
+                    width: 60.0,
+                    height: 60.0,
                   ),
+                  // const Icon(
+                  //   MyDoodleIcons.minus,
+                  //   size: 50.0,
+                  //   color: Colors.blue,
+                  // ),
+                  onPressed: () {
+                    // close keyboard if it is still open
+                    if (!FocusScope.of(context).hasPrimaryFocus) {
+                      FocusScope.of(context).unfocus();
+                    }
+
+                    // increase duration
+                    pickedDuration -= kDurationStep;
+                    // limit to min duration
+                    pickedDuration = pickedDuration < kMinDuration ? kMinDuration : pickedDuration;
+
+                    setState(() {});
+                  },
                 ),
               ),
               Expanded(
                 flex: 2,
-                child: Center(
-                  child: Text(
-                    "${pickedDuration.inHours}:${pickedDuration.inMinutes % 60} Stunde",
-                    style: GoogleFonts.architectsDaughter(fontSize: 25.0),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: FittedBox(
+                    child: Text(
+                      pickedDuration.inMinutes % 60 == 0
+                          ? pickedDuration.inHours > 1
+                              ? " ${pickedDuration.inHours} Stunden "
+                              : "  ${pickedDuration.inHours} Stunde "
+                          : pickedDuration.inHours == 0
+                              ? "halbe Stunde"
+                              : "${pickedDuration.inHours}.5 Stunden",
+                      style: GoogleFonts.architectsDaughter(fontSize: 25.0),
+                    ),
                   ),
                 ),
               ),
               Expanded(
-                child: FittedBox(
-                  child: TextButton(
-                    child: const Icon(
-                      MyDoodleIcons.plus,
-                      size: 50.0,
-                      color: Colors.blue,
-                    ),
-                    onPressed: () {
+                child: TextButton(
+                  child: Image.asset(
+                    "assets/plus.png",
+                    width: 60.0,
+                    height: 60.0,
+                  ),
+                  onPressed: () {
+                    // close keyboard if it is still open
+                    if (!FocusScope.of(context).hasPrimaryFocus) {
+                      FocusScope.of(context).unfocus();
+                    }
+
+                    if (pickedTime == null) {
+                      // todo: warning?
+                      print("select starting time first");
+                    } else {
                       // don't allow to go over 24h
                       if (pickedTime!.hour * 60 +
                               pickedTime!.minute +
@@ -370,8 +413,8 @@ class _Page2State extends State<Page2> {
 
                         setState(() {});
                       }
-                    },
-                  ),
+                    }
+                  },
                 ),
               ),
             ],
@@ -408,18 +451,19 @@ class _Page2State extends State<Page2> {
                       print("Jaa pressed");
 
                       // TODO: check that everything was selected and is correct
-                      if (myTextController.text.isEmpty) {
-                        print("NO TEXT ENTERED!");
+                      if (myTextController.text.isEmpty || pickedTime == null) {
+                        print("CANNOT START!");
                         // TODO: show warning that text needs to be entered!
                       } else {
                         // TODO: Duration
                         Task task = Task(
-                          iconData: widget.selectedIconData,
+                          categoryImg: widget.categoryImg,
                           taskDescription: myTextController.text,
                           difficulty: Difficulty.medium,
                           startTime: DateTime(2022, 2, 6, pickedTime!.hour, pickedTime!.minute),
                           duration: pickedDuration,
                           isDone: false,
+                          isActive: false,
                         );
                         Provider.of<TaskList>(context, listen: false).add(task);
                         Navigator.of(context).pop();

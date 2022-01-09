@@ -35,6 +35,17 @@ class TaskList extends ChangeNotifier {
           _projectsList.sublist(firstOpenTaskIdx, _projectsList.length)
             ..sort((a, b) => a.startTime.compareTo(b.startTime)));
     }
+
+    // reset all entries to "not active" besides first open task
+    bool first = true;
+    for (Task t in _projectsList) {
+      if (!t.isDone && first) {
+        t.isActive = true;
+        first = false;
+      } else {
+        t.isActive = false;
+      }
+    }
   }
 
   /// an unmodifiable view of the items in the list
@@ -63,6 +74,15 @@ class TaskList extends ChangeNotifier {
   void setDone({required int index, required bool value}) {
     _projectsList[index].isDone = value;
     _sort();
+    // this will tell all widgets that are listening to update
+    notifyListeners();
+  }
+
+  /// add polaroid to task
+  void addPolaroid(Task task, PolaroidFile polaroid) {
+    //int taskIdx = _projectsList.indexWhere((element) => element == task);
+    task.polaroid = polaroid;
+    //_sort(); // no sorting needed
     // this will tell all widgets that are listening to update
     notifyListeners();
   }

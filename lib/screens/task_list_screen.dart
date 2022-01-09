@@ -23,12 +23,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
       taskList.length,
       (index) => ProjectEntry(
         index: index,
-        iconData: taskList[index].iconData,
-        taskDescription: taskList[index].taskDescription,
-        difficulty: taskList[index].difficulty,
-        startTime: taskList[index].startTime,
-        duration: taskList[index].duration,
-        isDone: taskList[index].isDone,
+        task: taskList[index],
       ),
     );
   }
@@ -53,6 +48,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                   children: [
                     const SizedBox(height: 50.0),
                     ...projectsList,
+                    const SizedBox(height: 75.0),
                   ],
                 ),
               ),
@@ -61,7 +57,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                 right: 20.0,
                 child: FloatingActionButton(
                   elevation: 10.0,
-                  backgroundColor: Colors.white,
+                  backgroundColor: Colors.transparent,
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -71,10 +67,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
                       ),
                     );
                   },
-                  child: const Icon(
-                    MyDoodleIcons.plus,
-                    size: 54.0,
-                    color: kKliemannsSchwarz,
+                  child: Image.asset(
+                    "assets/plus.png",
                   ),
                 ),
               ),
